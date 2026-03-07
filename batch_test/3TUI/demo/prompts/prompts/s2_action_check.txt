@@ -1,0 +1,3 @@
+Complete Step 2-2: Recondider the Action Set 
+According to the input constraints, consider if there is any other possible combination.
+And output refined action set

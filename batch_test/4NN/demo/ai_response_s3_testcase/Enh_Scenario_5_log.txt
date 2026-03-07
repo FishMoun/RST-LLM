@@ -1,0 +1,4 @@
+Scenario: Enh_Scenario_5
+Scenario constraint [A4, A2, A6,A7, A3, A4, A13,A2, A9, A12, A15,A6, A1, A11, A16]:
+  Action Sequence: ['A4', 'A2', 'A6', 'A7', 'A3', 'A4', 'A13', 'A2', 'A9', 'A12', 'A15', 'A6', 'A1', 'A11', 'A16']
+Test case generation time: 2.7762534618377686 seconds

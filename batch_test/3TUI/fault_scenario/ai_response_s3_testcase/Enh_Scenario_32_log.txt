@@ -1,0 +1,4 @@
+Scenario: Enh_Scenario_32
+Scenario constraint [A8,A19,A4,A19,A20,A7,A11]:
+  Action Sequence: ['A8', 'A19', 'A4', 'A19', 'A20', 'A7', 'A11']
+Test case generation time: 0.16706585884094238 seconds

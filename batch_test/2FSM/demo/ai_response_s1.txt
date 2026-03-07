@@ -1,0 +1,96 @@
+本轮对话时间: 53.98秒
+本轮对话总token数: 2675
+dataset\lm_challenges\original_models\1_fsm\1_fsm_reqs.docx
+当前脚本错误次数：0
+AI回复: Model Name: fsm_12B.mdl
+Model Description: This model represents an abstraction of detailed design requirements for an Advanced Autopilot System interacting with an independent sensor platform. The Finite State Machine (FSM) represents a cyber-physical system with two independent components executing in real time for the purpose of ensuring a safe automatic operation in the vicinity of hazardous obstacles. The autopilot system, tightly integrated with the vehicle flight control computer, is responsible for commanding a safety maneuver in the event of a hazard. The sensor is the reporting agent to the autopilot with observability on imminent danger. When the conditions are met to allow an autopilot operation (supported and no failures) and the pilot is not manually controlling the vehicle (standby is false), the autopilot will behave normally until a maneuver is required in the event of a hazard (sensor is not good).
+
+Requirement Item 1:
+    Requirement Description: Exceeding sensor limits shall latch an autopilot pullup when the pilot is not in control (not standby) and the system is supported without failures (not apfail).
+    Original Text: Exceeding sensor limits shall latch an autopilot pullup when the pilot is not in control (not standby) and the system is supported without failures (not apfail).
+
+Requirement Item 2:
+    Requirement Description: The autopilot shall change states from TRANSITION to STANDBY when the pilot is in control (standby).
+    Original Text: The autopilot shall change states from TRANSITION to STANDBY when the pilot is in control (standby).
+
+Requirement Item 3:
+    Requirement Description: The autopilot shall change states from TRANSITION to NOMINAL when the system is supported and sensor data is good.
+    Original Text: The autopilot shall change states from TRANSITION to NOMINAL when the system is supported and sensor data is good.
+
+Requirement Item 4:
+    Requirement Description: The autopilot shall change states from NOMINAL to MANEUVER when the sensor data is not good.
+    Original Text: The autopilot shall change states from NOMINAL to MANEUVER when the sensor data is not good.
+
+Requirement Item 5:
+    Requirement Description: The autopilot shall change states from NOMINAL to STANDBY when the pilot is in control (standby).
+    Original Text: The autopilot shall change states from NOMINAL to STANDBY when the pilot is in control (standby).
+
+Requirement Item 6:
+    Requirement Description: The autopilot shall change states from MANEUVER to STANDBY when the pilot is in control (standby) and sensor data is good.
+    Original Text: The autopilot shall change states from MANEUVER to STANDBY when the pilot is in control (standby) and sensor data is good.
+
+Requirement Item 7:
+    Requirement Description: The autopilot shall change states from PULLUP to TRANSITION when the system is supported and sensor data is good.
+    Original Text: The autopilot shall change states from PULLUP to TRANSITION when the system is supported and sensor data is good.
+
+Requirement Item 8:
+    Requirement Description: The autopilot shall change states from STANDBY to TRANSITION when the pilot is not in control (not standby).
+    Original Text: The autopilot shall change states from STANDBY to TRANSITION when the pilot is not in control (not standby).
+
+Requirement Item 9:
+    Requirement Description: The autopilot shall change states from STANDBY to MANEUVER when a failure occurs (apfail).
+    Original Text: The autopilot shall change states from STANDBY to MANEUVER when a failure occurs (apfail).
+
+Requirement Item 10:
+    Requirement Description: The sensor shall change states from NOMINAL to FAULT when limits are exceeded.
+    Original Text: The sensor shall change states from NOMINAL to FAULT when limits are exceeded.
+
+Requirement Item 11:
+    Requirement Description: The sensor shall change states from NOMINAL to TRANSITION when the autopilot is not requesting support (not request).
+    Original Text: The sensor shall change states from NOMINAL to TRANSITION when the autopilot is not requesting support (not request).
+
+Requirement Item 12:
+    Requirement Description: The sensor shall change states from FAULT to TRANSITION when the autopilot is not requesting support (not request) and limits are not exceeded (not limits).
+    Original Text: The sensor shall change states from FAULT to TRANSITION when the autopilot is not requesting support (not request) and limits are not exceeded (not limits).
+
+Requirement Item 13:
+    Requirement Description: The sensor shall change states from TRANSITION to NOMINAL when the autopilot is requesting support (request) and the autopilot reports the correct active mode (mode).
+    Original Text: The sensor shall change states from TRANSITION to NOMINAL when the autopilot is requesting support (request) and the autopilot reports the correct active mode (mode).
+
+Variable 1:
+    Variable Name: standby
+    Type: boolean
+    Description: True when the pilot is in control of the vehicle
+    Port Type: Input
+    Is Constant: No
+
+Variable 2:
+    Variable Name: apfail
+    Type: boolean
+    Description: Failure indication from an external source
+    Port Type: Input
+    Is Constant: No
+
+Variable 3:
+    Variable Name: supported
+    Type: boolean
+    Description: Indication of general health of system, must be True to enable operation
+    Port Type: Input
+    Is Constant: No
+
+Variable 4:
+    Variable Name: limits
+    Type: boolean
+    Description: External indication to sensor on faulty condition impeding safe operation.
+    Port Type: Input
+    Is Constant: No
+
+Variable 5:
+    Variable Name: pullup
+    Type: boolean
+    Description: True when the autopilot is in the MANEUVER state
+    Port Type: Output
+    Is Constant: No
+
+Test Configuration 1: t = 10
+--------------------------------------------------

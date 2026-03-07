@@ -1,0 +1,9 @@
+脚本运行时间: 14.11秒
+错误信息:
+
+  File D:\研究生\科研\Testcase_Scenario_Lab\experiments\1317-3-2\model\collect_coverage.m, line 35, in collect_coverage
+
+  File C:\Program Files\MATLAB\R2024a\toolbox\matlab\lang\run.m, line 112, in run
+Simulink 对象名称无效: 'nn_12B/FromWorkspace'。
+
+--------------------------------------------------

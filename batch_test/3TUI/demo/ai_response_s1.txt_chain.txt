@@ -1,0 +1,63 @@
+思维链内容:
+We are given a requirement document for a model named "Tustin Integrator". Let's break down the tasks step by step.
+
+#1 Identify the model description and provide a natural language introduction.
+
+From the document:
+- Model Name: integrator_12B.mdl
+- Description: "A common flight control utility for computing the Tustin Integration of a signal yout = T/2*(xin + xinpv)+ ypv. The algorithm bounds the allowable integration range with a position limiter, with TL as the Top Limit, and BL as the Bottom Limit. Other inputs are the signal to be integrated (xin), the time step (dt), a Boolean reset flag (reset), and the initial condition upon a reset condition (ic). A provision has been implemented for the limiter functionality in the algorithm. If the user plumbs a TL value that is less than BL, the algorithm will swap these numerical values to correctly bound the signal."
+
+We can extract the model name and description from above.
+
+#2 Extract all requirement items.
+
+Looking at the document, there are three explicit requirements:
+
+1. When Reset is True and the Initial Condition (ic) is bounded by the provided Top and Bottom Limits (BL <= ic <= TL), the Output (yout) shall equal the Initial Condition (ic).
+2. The Output (yout) shall be bounded by the provided Top and Bottom limits (TL and BL).
+3. When in normal operation, the output shall be the result of the equation, yout = T/2*(xin + xinpv)+ ypv.
+
+We also note the definition of normal operation: the integrator is not in reset mode, and the output is within the specified limits (TL and BL).
+
+But note: the requirements are listed in the "Requirements:" section. We will extract each requirement item accordingly.
+
+#3 Extract the model input/output variable information from the tables.
+
+We have two tables: Table 1 for inputs and Table 2 for output.
+
+From Table 1 (Inputs):
+- xin (Double, Input Signal to be integrated)
+- T (Double, Time step quantified by rate of execution)
+- TL (Double, Top Limit bounding the output, yout)
+- BL (Double, Bottom Limit bounding the output, yout)
+- reset (Boolean, Reset control, initializes output to ic value)
+- ic (Double, Initial Condition for yout when in reset mode)
+
+From Table 2 (Outputs):
+- yout (Double, Output Signal result of Tustin integration method on xin)
+
+We note that the description also mentions "dt" but the table uses "T" for time step. We'll stick to the table.
+
+Also note: the variable types are given as "Double", but in the output format we are to use integer, real, or boolean. Since Double is a real number, we use "real".
+
+#4 Extract the model’s Test Config information.
+
+The test config information is provided in the document:
+- xin is parameterized as a PCHIP-interpolated smooth signal, defined by three control points c1,c2,c3, --1<=xin<=1
+- -10<=TL<=10
+- -10<=BL<=10
+- t = 20 (t is simulation time)
+- -10<=ic<=10
+- T = 0.1
+
+We are to list each test configuration as a separate item in the output.
+
+Now, let's format the output as required.
+
+Note: The output format for requirement items requires both a requirement description and the original text. We will use the original text from the document for each requirement.
+
+For the variables, note the instructions: only in the table, do not construct new params. We will only list the variables in the tables.
+
+For test configurations, we list each line that specifies a test condition.
+
+Let's proceed to write the output.

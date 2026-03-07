@@ -1,0 +1,366 @@
+思维链内容:
+We are to generate 10 test cases for 0-30 time steps (so each test case has rows for time=0,1,...,30).
+ Each test case is a sequence of 31 rows (time from 0 to 30) with the following columns: time, ia, ib, ic, PClimit, Tlevel.
+ We are given that Tlevel and PClimit are constant in one simulation (so for each test case, they are fixed for all time steps).
+
+ We are to generate 10 such test cases (so 10 CSV blocks, each with 31 rows).
+
+ The test cases should cover various scenarios to test the requirements. We are to consider:
+   - No-fail state: where all three signals are within the trip level of each other (or miscompares are within the persistence limit).
+   - Single-fail state: where one branch has failed (so we might have two good signals and one bad signal that is outside the trip level for more than the persistence limit).
+   - Dual-fail state: but note the model only covers no-fail and part of single-fail state. So we focus on the first two.
+
+ We are to design test cases that exercise the requirements.
+
+ Let's plan the test cases:
+
+ We have 10 test cases. We can assign:
+
+ Test Case 1: Normal operation, no miscompares. (All signals within Tlevel, so no PC increment)
+ Test Case 2: A transient miscompare that does not exceed PClimit. (One branch deviates for a short time, then comes back)
+ Test Case 3: A persistent miscompare that exceeds PClimit, leading to a first failure. (Then we switch to single-fail state)
+ Test Case 4: In single-fail state, a second miscompare between the two remaining good branches that does not exceed PClimit.
+ Test Case 5: In single-fail state, a second miscompare that exceeds PClimit, leading to a second failure (then monitoring stops).
+ Test Case 6: Two branches miscompare with the third, but one of them is within Tlevel and the other is not? (Maybe to test mid-value selection with miscompares)
+ Test Case 7: All three signals are equal, so no miscompares.
+ Test Case 8: Two signals are equal, the third is within Tlevel, so no miscompare.
+ Test Case 9: Two signals are equal, the third is outside Tlevel for exactly PClimit steps, then comes back.
+ Test Case 10: A case where the miscompare switches between different pairs (e.g., A and B miscompare, then B and C miscompare) without exceeding PClimit.
+
+ However, note that the model is for the no-fail state and a portion of the single-fail state. So we focus on the first failure and the second failure in progress.
+
+ Let's define the parameters for each test case:
+
+ We have 31 time steps (0 to 30). We can set Tlevel and PClimit for each test case.
+
+ We'll generate 10 CSV blocks, each with 31 rows.
+
+ We'll write the test cases in the following format:
+
+ ```csv
+ time,ia,ib,ic,PClimit,Tlevel
+ 0,value0a,value0b,value0c,PClimit,Tlevel
+ 1,value1a,value1b,value1c,PClimit,Tlevel
+ ...
+ 30,value30a,value30b,value30c,PClimit,Tlevel
+ ```
+
+ Let's design each test case step by step.
+
+ Note: The input values are between 0 and 20, Tlevel between 0 and 1, and PClimit between 1 and 5.
+
+ We'll set Tlevel and PClimit for each test case.
+
+ Test Case 1: Normal operation, no miscompares.
+   Let Tlevel = 0.5, PClimit = 3.
+   We'll set all three signals to be the same value, say 10, for all time steps.
+
+ Test Case 2: Transient miscompare (does not exceed PClimit).
+   Let Tlevel = 0.5, PClimit = 3.
+   We set ia=10, ib=10, ic=10 for most time steps.
+   At time 10 to 12, let ic deviate to 11 (which is within Tlevel? 11-10=1 > 0.5, so it's a miscompare). But note: we want it to be a miscompare but not exceed PClimit.
+   Actually, we want the miscompare to last for 3 steps (PClimit=3) but we don't want to exceed PClimit? Actually, if it lasts for 3 steps and PClimit=3, then at the third step it would be exactly PClimit. But note: the requirement says "more than the persistence limit" (RM-001: lasts for more than the persistence limit). So if it lasts for exactly PClimit, it should not be a failure? Let me check: "If the signals miscompare for a single frame longer than the allocated persistence, an input failure will be declared." So if it lasts for exactly PClimit, then it is not longer than PClimit. So we can set the miscompare for exactly PClimit steps and then it recovers, so no failure.
+   We'll set: time 10-12 (3 steps) with ic=11, then at time 13 back to 10.
+
+ Test Case 3: Persistent miscompare leading to first failure.
+   Let Tlevel = 0.5, PClimit = 3.
+   We set ia=10, ib=10, ic=10 for the first 9 time steps.
+   Then starting at time 10, let ic become 11 and stay at 11 for the rest of the simulation (so from time 10 to 30, that's 21 steps, which is more than PClimit=3).
+   We expect that at time 13 (after 3 miscompares at time 10,11,12) the failure is latched.
+
+ Test Case 4: In single-fail state, second miscompare that does not exceed PClimit.
+   We assume that a first failure has already occurred (say branch C failed). We are in single-fail state.
+   We set Tlevel=0.5, PClimit=3.
+   We set the signals: branch A and B are good, branch C is failed (so we don't care about branch C? Actually, in single-fail state, we are using the good channel average of A and B, and we monitor the difference between A and B).
+   We set ia and ib to be 10 for most of the time, but then have a transient miscompare between A and B.
+   Let's set: from time 0 to 9, ia=10, ib=10, ic=11 (failed branch, so it's outside the trip level from the good ones? Actually, in single-fail state, we are only monitoring the two good branches. So we set ic to be 11 (which is more than Tlevel away from the good ones) to indicate it's failed.
+   Then, at time 10 to 12, let ib become 11 (so now ia=10, ib=11, ic=11). The difference between ia and ib is 1 > 0.5, so miscompare. But we want it to be transient, so at time 13, ib returns to 10.
+
+ Test Case 5: In single-fail state, second miscompare that exceeds PClimit, leading to second failure.
+   Similar to Test Case 4, but the miscompare between A and B persists for more than PClimit.
+   We set: from time 0 to 9, ia=10, ib=10, ic=11 (failed).
+   Then from time 10 to 30, let ib become 11 and stay there. So the miscompare between ia and ib lasts for 21 steps, which is more than PClimit=3.
+
+ Test Case 6: Two branches miscompare with the third, but one is within Tlevel and the other is not? Actually, we want to test the mid-value selection in the no-fail state with two miscompares? Let's design:
+   We are in no-fail state. We set Tlevel=0.5, PClimit=3.
+   We set: ia=10, ib=10.5, ic=11.5.
+   The difference between ia and ib is 0.5 (equal to Tlevel, so no miscompare? Actually, the requirement says "greater than the designated trip level". So if it's equal to Tlevel, it's not greater, so no miscompare.
+   The difference between ib and ic is 1.0, which is greater than Tlevel, so there is a miscompare between ib and ic.
+   The difference between ia and ic is 1.5, which is also greater than Tlevel.
+   So we have two miscompares: (ib,ic) and (ia,ic). But note, the miscompare is between two signals. We have to see which pair is miscompared and for how long.
+   We can set this condition for the entire simulation (30 steps) and see if the PC for any pair exceeds PClimit? But note: the monitor works on each pair? Actually, the monitor forms three difference equations. So we are monitoring three differences: |ia-ib|, |ib-ic|, |ic-ia|.
+   We want to see that the miscompare between ia and ic (and ib and ic) are both present, but the one between ia and ib is not (because 0.5 is not greater than 0.5). So we expect that the PC for the pair (ia,ib) remains 0, but for the other two pairs, it will increment until it reaches PClimit and then latch a failure for branch C? Actually, which branch is failing? In no-fail state, if two branches miscompare with the third, then the third branch is the one that is different. So we expect that branch C will be declared failed after the persistence count for either (ia,ic) or (ib,ic) reaches the limit.
+
+   Let's set: from time 0 to 30, ia=10, ib=10.5, ic=11.5, Tlevel=0.5, PClimit=3.
+   Then, at each time step, |ia-ib|=0.5 (not >0.5), so no miscompare for (ia,ib).
+   |ia-ic|=1.5>0.5, so miscompare for (ia,ic) and (ib,ic)=1.0>0.5.
+   So we have two miscompares involving branch C. The persistence count for branch C (in the context of both comparisons) will increment. When it reaches 3, then branch C will be declared failed.
+
+   But note: the model might have a way to isolate which branch is the failed one. We are generating the test case to see if the model correctly identifies branch C.
+
+ Test Case 7: All three signals are equal.
+   Tlevel=0.5, PClimit=3.
+   Set ia=ib=ic=10 for all time steps.
+
+ Test Case 8: Two signals are equal, the third is within Tlevel.
+   Tlevel=0.5, PClimit=3.
+   Set ia=10, ib=10, ic=10.4 for all time steps.
+   Then |ia-ic|=0.4 <= 0.5, so no miscompare. Similarly for ib and ic.
+
+ Test Case 9: Two signals are equal, the third is outside Tlevel for exactly PClimit steps, then comes back.
+   Tlevel=0.5, PClimit=3.
+   Set ia=10, ib=10 for all time steps.
+   Set ic=10 for time 0-9, then at time 10-12 (3 steps) set ic=11, then at time 13-30 set ic=10.
+   So the miscompare between (ia,ic) and (ib,ic) lasts for exactly 3 steps (time 10,11,12). Then at time 13, it recovers. So we expect that the failure is not latched because it did not exceed PClimit.
+
+ Test Case 10: Miscompare switches between pairs without exceeding PClimit.
+   We want to have miscompares, but each miscompare lasts for less than PClimit, and they are between different pairs.
+   For example, let Tlevel=0.5, PClimit=3.
+   We set:
+     time 0-2: ia=10, ib=10, ic=10
+     time 3-5: ia=11, ib=10, ic=10   -> miscompare between (ia,ib) and (ia,ic)
+     time 6-8: ia=10, ib=11, ic=10   -> miscompare between (ia,ib) and (ib,ic)
+     time 9-11: ia=10, ib=10, ic=11   -> miscompare between (ia,ic) and (ib,ic)
+     time 12-30: all back to 10.
+
+   Each miscompare lasts for 3 steps (exactly PClimit) but does not exceed, so no failure should be latched.
+
+ Now, we write each test case as a CSV block.
+
+ Note: In the single-fail state test cases (4 and 5), we are starting with a failed branch. We have to set the initial condition of the DST? But note: the test cases are only about the input signals and the fixed parameters. The model will have to keep track of the state (like which branch is failed). However, in the provided test case format, we only have the input signals and the fixed parameters. The model's internal state (like which branch is failed) is not part of the input. So for test cases 4 and 5, we are assuming that the model has already latched a failure for branch C (from a previous time, before time 0). But note: our simulation starts at time 0. So we have to set the initial condition of the DST? Actually, the problem says that the test cases are for 0-30. We are not controlling the DST directly. So for test cases 4 and 5, we are in the single-fail state at time 0. How do we achieve that? We have to set the signals in such a way that by time 0, the model has already latched a failure for one branch. But note: we are generating the input signals from time 0 to 30. We cannot set the DST at time 0. So we have to design the signals so that at time 0, the model is already in single-fail state. That means we need to have a pre-condition that before time 0, there was a persistent miscompare that led to a failure. But our test case starts at time 0. So we have two options:
+
+ Option 1: We assume that at time 0, the model has already been running and the failure is already latched. Then we set the signals at time 0 accordingly. But then we are not testing the initial transition from no-fail to single-fail. That's acceptable because we are only required to generate test cases for 0-30. We can start with any initial state.
+
+ Option 2: We include in the test case the signals that cause the first failure, and then the second failure. But note: the test case has 31 steps. We can use the first few steps to cause the first failure, and then the rest for the second failure.
+
+ Let's adjust Test Case 4 and 5 to include the first failure.
+
+ Revised Test Case 4:
+   We want to have a first failure (branch C) and then a transient miscompare between A and B.
+   We set Tlevel=0.5, PClimit=3.
+   Steps:
+     time 0-2: ia=10, ib=10, ic=10  (no miscompare)
+     time 3-5: ic becomes 11 (so miscompare between (ia,ic) and (ib,ic) for 3 steps, which is exactly PClimit, so at time 5, the failure for branch C is latched? Actually, it takes 3 miscompares (time 3,4,5) and then at time 5, the PC for branch C becomes 3, which is equal to PClimit, but note: the requirement says "more than the persistence limit". So at time 5, it is not more than, so the failure is not latched until the next step? Actually, let's read: "If the signals miscompare for a single frame longer than the allocated persistence". So if PClimit=3, then we need 4 miscompares to latch a failure? But note: the persistence count is the number of consecutive miscompares. When the count reaches the limit, it is still within the limit. So we need to exceed the limit, meaning the count must be greater than the limit. So if PClimit=3, then we need 4 consecutive miscompares to latch a failure.
+
+   Let me re-examine: The requirement [RM-001] says: "a mis-compare ... that lasts for more than the persistence limit". So if the persistence limit is 3, then we need 4 or more consecutive miscompares to latch a failure.
+
+   So we adjust:
+
+   Revised Test Case 4 (and similarly for others that involve latching a failure):
+
+   We set PClimit=3. Then we need 4 consecutive miscompares to latch a failure.
+
+   So for Test Case 3 (first failure):
+        time 0-2: no miscompare (all 10)
+        time 3-6: ic=11 (so at time 3,4,5,6 -> 4 steps, which is more than 3). Then at time 6, the failure for branch C is latched.
+
+   For Test Case 4 (first failure and then transient second miscompare):
+        We want the first failure to be latched by time 6, and then we want a transient miscompare between A and B that does not exceed PClimit (so at most 3 steps).
+
+        We set:
+          time 0-2: ia=10, ib=10, ic=10
+          time 3-6: ic=11 (so at time 6, branch C is latched as failed)
+          time 7-9: ib=11 (so now we have ia=10, ib=11, ic=11). The miscompare between ia and ib (the two good branches) lasts for 3 steps (time 7,8,9). Then at time 10, ib returns to 10.
+
+   Similarly, for Test Case 5 (second failure):
+        time 0-2: all 10
+        time 3-6: ic=11 (first failure latched at time 6)
+        time 7-30: ib=11 (so the miscompare between ia and ib lasts from time 7 to 30, which is 24 steps, more than 3, so at time 10 (after 4 miscompares at time 7,8,9,10) the second failure for branch B is latched? But note: in single-fail state, we are only monitoring the two good branches. So the persistence count for the miscompare between A and B will start at time 7. At time 10, we have 4 consecutive miscompares (time 7,8,9,10) so the second failure is latched at time 10.
+
+   We adjust all test cases accordingly.
+
+ Let's redesign all test cases with the understanding that we need more than PClimit consecutive miscompares to latch a failure.
+
+ We'll set PClimit=3 for all test cases (unless specified otherwise) and Tlevel=0.5 for most.
+
+ Test Case 1: No miscompares.
+   Tlevel=0.5, PClimit=3.
+   ia=ib=ic=10 for all time steps.
+
+ Test Case 2: Transient miscompare (exactly PClimit, so no failure).
+   Tlevel=0.5, PClimit=3.
+   We set:
+     time 0-9: all 10
+     time 10-12: ic=11 (3 steps, which is exactly PClimit, so no failure)
+     time 13-30: all 10
+
+ Test Case 3: First failure (branch C) latched.
+   Tlevel=0.5, PClimit=3.
+   We set:
+     time 0-9: all 10
+     time 10-13: ic=11 (4 steps, which is more than 3, so at time 13, the failure for branch C is latched)
+     time 14-30: ic=11 (but now we are in single-fail state, so we monitor only A and B, which are both 10, so no miscompare)
+
+   But note: after time 13, we are in single-fail state. The selected value becomes the average of A and B (both 10) so 10.
+
+ Test Case 4: First failure and then a transient miscompare between A and B (does not exceed PClimit).
+   Tlevel=0.5, PClimit=3.
+   We set:
+     time 0-9: all 10
+     time 10-13: ic=11 (4 steps, latch failure for C at time 13)
+     time 14-16: ib=11 (3 steps, exactly PClimit, so no second failure)
+     time 17-30: ib=10 (so back to normal for A and B)
+
+ Test Case 5: First failure and then a second failure (branch B) latched.
+   Tlevel=0.5, PClimit=3.
+   We set:
+     time 0-9: all 10
+     time 10-13: ic=11 (4 steps, latch failure for C at time 13)
+     time 14-17: ib=11 (4 steps, more than 3, so at time 17, the second failure for branch B is latched)
+     time 18-30: ib=11 (but now we have two failures, so monitoring stops)
+
+ Test Case 6: Two branches miscompare with the third (branch C) and we latch the first failure for C.
+   Tlevel=0.5, PClimit=3.
+   We set:
+     time 0-9: ia=10, ib=10.5, ic=11.5 (so |ia-ib|=0.5, not >0.5; |ia-ic|=1.5>0.5; |ib-ic|=1.0>0.5)
+     We need the miscompare involving branch C to last for more than 3 steps. So we set this for the entire simulation.
+     Actually, we want to see that at some point, branch C is declared failed. We set:
+        time 0-30: ia=10, ib=10.5, ic=11.5
+     Then the miscompare between (ia,ic) and (ib,ic) is present at every step. So after 4 steps (time 0,1,2,3) we have 4 consecutive miscompares for branch C? But note: the model might have three separate persistence counters for each branch? Actually, the requirement says: "Each device has a unique persistence counter (PC)". So each branch has its own PC. So for branch C, the PC will increment when it is involved in a miscompare with either A or B. So at time 3, the PC for C becomes 4 (if we start counting from 0). So at time 3, we have 4 consecutive miscompares for branch C, which is more than 3, so branch C is latched as failed at time 3.
+
+     But note: at time 0, we are in no-fail state. So we set the signals accordingly.
+
+ Test Case 7: All equal.
+   Tlevel=0.5, PClimit=3.
+   All 10 for all time.
+
+ Test Case 8: Two equal, third within Tlevel.
+   Tlevel=0.5, PClimit=3.
+   ia=10, ib=10, ic=10.4 for all time.
+
+ Test Case 9: Two equal, third outside Tlevel for exactly PClimit steps, then recovers.
+   Tlevel=0.5, PClimit=3.
+   We set:
+     time 0-9: all 10
+     time 10-12: ic=11 (3 steps, exactly PClimit, so no failure)
+     time 13-30: all 10
+
+ Test Case 10: Miscompare switches between pairs, each for exactly PClimit steps.
+   Tlevel=0.5, PClimit=3.
+   We set:
+     time 0-2: all 10
+     time 3-5: ia=11, ib=10, ic=10   (miscompare between A and B, A and C)
+     time 6-8: ia=10, ib=11, ic=10   (miscompare between A and B, B and C)
+     time 9-11: ia=10, ib=10, ic=11   (miscompare between A and C, B and C)
+     time 12-30: all 10
+
+   In each case, the miscompare lasts for 3 steps (exactly PClimit) so no failure is latched.
+
+ Now, we write the CSV for each test case.
+
+ We'll write 10 blocks, each with 31 rows (time 0 to 30).
+
+ We'll set the parameters (PClimit and Tlevel) at the beginning of each block (and they are constant for the block).
+
+ Let's write the CSV for each test case.
+
+ Note: The CSV format requires the header and then the data.
+
+ We'll write:
+
+ ```csv
+ time,ia,ib,ic,PClimit,Tlevel
+ 0,10,10,10,3,0.5
+ 1,10,10,10,3,0.5
+ ...
+ ```
+
+ We'll do this for each test case.
+
+ We are going to generate 10 such blocks.
+
+ Let's generate the data for each test case.
+
+ We'll create a list of test cases, each test case is a list of 31 rows (each row is a tuple of time, ia, ib, ic, PClimit, Tlevel).
+
+ We'll then format each block as a CSV string.
+
+ We'll write the output as:
+
+ ```csv
+ time,ia,ib,ic,PClimit,Tlevel
+ 0,10,10,10,3,0.5
+ 1,10,10,10,3,0.5
+ ... (until time 30)
+ ```
+
+ Then a new block, and so on.
+
+ Let's code accordingly.
+
+ Note: We are to generate 10 test cases, so we'll define 10 different scenarios.
+
+ We'll assume the time steps are 0 to 30 inclusive.
+
+ We'll define a function to generate the rows for a test case given the parameters and the signal values over time.
+
+ But note: for each test case, the signal values are defined per time step.
+
+ We'll create a list of 10 test cases, each test case is a dictionary with:
+   - PClimit: constant
+   - Tlevel: constant
+   - signals: a list of tuples (ia, ib, ic) for each time step from 0 to 30.
+
+ Then we format.
+
+ Let's define the test cases as described above.
+
+ We'll use the revised test cases.
+
+ Test Case 1: All 10.
+ Test Case 2: Transient miscompare in ic at time 10-12 (3 steps).
+ Test Case 3: First failure for C: ic=11 from time 10 to 30 (so 21 steps, more than 3).
+ Test Case 4: First failure for C (ic=11 from time 10 to 13, 4 steps) and then transient miscompare in ib at time 14-16 (3 steps).
+ Test Case 5: First failure for C (ic=11 from time 10 to 13, 4 steps) and then second failure for B (ib=11 from time 14 to 30, 17 steps, more than 3).
+ Test Case 6: Two branches miscompare with the third (branch C) for the entire time.
+ Test Case 7: All equal.
+ Test Case 8: Two equal, third within Tlevel.
+ Test Case 9: Two equal, third outside Tlevel for exactly 3 steps (time 10-12).
+ Test Case 10: Switching miscompares.
+
+ We'll set Tlevel=0.5 and PClimit=3 for all test cases, except we might vary for some? The problem allows 0<=Tlevel<=1 and 1<=PClimit<=5. We can vary, but for simplicity, we use the same.
+
+ However, note that the problem says "generate 10 test cases". We are free to choose different Tlevel and PClimit. But for simplicity, we use the same in all test cases? Actually, the problem says "Tlevel and PClimit is constant in one simulation". So in each test case, they are constant, but they can vary between test cases.
+
+ Let's vary them a bit to cover the range. We can set:
+
+ Test Case 1: Tlevel=0.5, PClimit=3
+ Test Case 2: Tlevel=0.3, PClimit=2
+ Test Case 3: Tlevel=0.8, PClimit=4
+ Test Case 4: Tlevel=0.2, PClimit=5
+ Test Case 5: Tlevel=0.6, PClimit=1
+ Test Case 6: Tlevel=0.4, PClimit=3
+ Test Case 7: Tlevel=0.9, PClimit=2
+ Test Case 8: Tlevel=0.1, PClimit=4
+ Test Case 9: Tlevel=0.7, PClimit=5
+ Test Case 10: Tlevel=0.0, PClimit=1? But Tlevel=0 means any difference is a miscompare. Let's set Tlevel=0.0 and PClimit=1 for test case 10.
+
+ But note: in test case 10, we have miscompares that last for exactly 3 steps. With PClimit=1, then 3 steps is more than 1, so we would latch a failure. But we don't want to latch in test case 10? Actually, we want to test switching without latching. So we need to adjust the PClimit for test case 10 to be at least 3. So let's set PClimit=3 for test case 10 as well.
+
+ Alternatively, we can set different Tlevel and PClimit for each test case, but we must ensure that the test case scenario still makes sense.
+
+ Let's keep the original Tlevel=0.5 and PClimit=3 for all test cases, because we designed the scenarios around that.
+
+ We can change the Tlevel and PClimit for some test cases without changing the scenario, as long as the miscompares are still detected or not accordingly.
+
+ For example, in test case 2, we have a miscompare of 1.0 (ic=11 vs 10). With Tlevel=0.5, it is a miscompare. If we set Tlevel=1.0, then it would not be a miscompare. So we must set Tlevel less than 1.0 for that test case.
+
+ We'll stick to Tlevel=0.5 and PClimit=3 for all test cases for simplicity.
+
+ However, note that the problem asks for 10 test cases. We are providing 10.
+
+ We'll generate the CSV accordingly.
+
+ Let's code the test cases.
+
+ We'll create a list of test cases, each test case is a dictionary with:
+   - name: test case number
+   - Tlevel: 0.5
+   - PClimit: 3
+   - signals: a list of (ia, ib, ic) for time 0 to 30.
+
+ We'll define the signals for each test case as per the design.
+
+ We'll then format each test case as a CSV block.
+
+ Let's do it.

@@ -1,0 +1,17 @@
+根据输入的需求文档，针对需求""The Output (yout) shall be bounded by the provided Top and Bottom limits (TL and BL)""，生成10组指定格式的0-20周期测试用例,仅考虑0,10,20位置
+reset用0或1表示
+输出格式如下(csv文件格式)：
+第1组:
+```csv
+time,xin,reset,ic,TL,BL,T
+0,...
+10,...
+20,...
+
+```
+
+第2组:
+...
+
+第3组:
+...

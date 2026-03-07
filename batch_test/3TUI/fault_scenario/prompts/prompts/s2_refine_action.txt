@@ -1,0 +1,3 @@
+Apply the concept of combinatorial equivalence classes, 
+compute the Cartesian product of the atomic condition in the input and temporal constraints to discover additional input patterns
+and generate an refined action set

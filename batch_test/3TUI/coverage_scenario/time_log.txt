@@ -1,0 +1,12 @@
+Experiment 1506-tui-1 Time Summary:
+llm_interaction_time_step1: 48.69 seconds
+llm_interaction_time_step2: 263.09 seconds
+total_llm_interaction_time: 441.39 seconds
+testcase_generation_time: 0.0 seconds
+matlab_simulation_time: 0.0 seconds
+total_experiment_time: 441.39 seconds
+Time Summary:
+total_llm_interaction_time: 0.0 seconds
+testcase_generation_time: 3.95 seconds
+matlab_simulation_time: 0.02 seconds
+total_experiment_time: 3.97 seconds

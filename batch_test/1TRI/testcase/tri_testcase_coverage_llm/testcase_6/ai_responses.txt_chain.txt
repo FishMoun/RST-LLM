@@ -1,0 +1,143 @@
+思维链内容:
+We are to generate 10 test cases for the triplex signal monitor model. Each test case should be a CSV with columns: time, ia, ib, ic, PClimit, Tlevel.
+ However, note that the problem says: "Tlevel and PClimit is constant in one simulation." So in each test case (which is one simulation) we have constant Tlevel and PClimit.
+
+ We are to generate 10 test cases (i.e., 10 simulations). Each simulation runs for 30 time steps (t=30). So each CSV will have 30 rows (time=0 to 29 or 1 to 30? Let's assume time starts at 0 and goes to 29, or 1 to 30? The requirement says t=30, so we have 30 time steps.
+
+ Let's clarify the test config: 
+   t = 30 (so 30 time steps)
+   0 ≤ ia, ib, ic ≤ 20
+   0 ≤ Tlevel ≤ 1
+   1 ≤ PClimit ≤ 5
+
+ We are to test the requirements. We need to design test cases that cover:
+   - No-fail state: 
+        [RM-001]: A miscompare that lasts more than PClimit frames should be reported as failure.
+        [RM-002]: The selected value is the mid-value.
+   - Single fail state (after one failure is latched):
+        [RM-003]: The selected value is the good channel average of the two remaining good branches.
+        [RM-004]: If a second failure is in progress, the selected value remains unchanged from the previous selected value.
+
+ We are to generate 10 test cases. Let's plan:
+
+ Test Case 1: No failures (all three signals are within Tlevel of each other) -> no miscompare, so no failure.
+ Test Case 2: One signal deviates for more than PClimit frames (so that a failure is latched) -> then we are in single fail state.
+ Test Case 3: One signal deviates for exactly PClimit frames (so that a failure is latched) and then returns to normal? 
+              But note: once a failure is latched, we are in single fail state. The requirement doesn't say the failure can be cleared.
+ Test Case 4: Two signals deviate (so that we get a second failure) -> then monitoring stops.
+ Test Case 5: In single fail state, the remaining two signals are within Tlevel -> no second failure.
+ Test Case 6: In single fail state, the remaining two signals miscompare for more than PClimit -> second failure is latched.
+ Test Case 7: In single fail state, the remaining two signals miscompare for exactly PClimit -> second failure is latched.
+ Test Case 8: In no-fail state, a miscompare occurs but for less than PClimit frames -> no failure.
+ Test Case 9: In no-fail state, two signals deviate together (so that the mid-value is still the third one) -> but note: the miscompare is between the two deviating and the third? Actually, we have three branches, so we compare each pair.
+ Test Case 10: Edge cases: Tlevel=0, PClimit=1, and one signal is different by a tiny amount for one frame -> then failure is latched? Actually, if Tlevel=0 then any difference is a miscompare.
+
+ However, note that the test cases are for 30 time steps. We need to generate the signals for 30 time steps.
+
+ We are to output 10 CSV strings, each in the format:
+
+ time,ia,ib,ic,PClimit,Tlevel
+
+ We are to write 10 such CSV strings, each for a different test case.
+
+ Let's design each test case:
+
+ We'll generate the time steps from 0 to 29 (or 1 to 30)? The problem doesn't specify the starting time. Let's use 0 to 29 for simplicity.
+
+ We are to set constant Tlevel and PClimit for each test case.
+
+ We'll design the signals ia, ib, ic for each time step.
+
+ We'll write a function to generate each test case as a CSV string.
+
+ Let's define the test cases:
+
+ Test Case 1: No failures
+   Tlevel = 0.5, PClimit = 3
+   All signals are within 0.5 of each other. Let's set:
+      ia = 10, ib = 10, ic = 10 for all time steps.
+
+ Test Case 2: One failure (branch A deviates for more than PClimit frames)
+   Tlevel = 0.5, PClimit = 3
+   Let branch A deviate by 1 (so that the difference is 1, which is >0.5) for 4 frames (more than PClimit=3) and then stay deviated? 
+   Actually, once the failure is latched, we are in single fail state. We can keep it deviated to simulate the failed branch.
+   We want to show that after 3 frames of miscompare, the failure is latched (at time step 3? or after the 3rd miscompare? The requirement says: "lasts for more than the persistence limit". So if PClimit=3, then we need 4 frames of miscompare to latch a failure? Let's read: "If the signals miscompare for a single frame longer than the allocated persistence, an input failure will be declared." So if PClimit=3, then we need 4 frames of miscompare to declare a failure. Alternatively, the text says: "the total number of iterations that signals are permitted to miscompare ... before a failure is declared." So if PC is the current persistence count, then when PC >= PClimit, a failure is declared. So if PClimit=3, then when PC becomes 3 (after 3 frames of miscompare) the failure is declared? But note: the requirement says "more than the persistence limit". Let's assume that when the miscompare has occurred for a number of frames equal to PClimit, then at the next frame (if the miscompare is still present) the failure is declared. But in the model, the PC is incremented when there is a miscompare. When PC reaches PClimit, then the failure is latched. So if PClimit=3, then after 3 frames of miscompare, the failure is latched. We'll assume that.
+
+   So for test case 2:
+      At time 0: all at 10.
+      From time 1 to 3: ia = 11 (so difference with ib and ic is 1, which is >0.5). 
+      Then at time 4, the failure is latched (PC becomes 3, which equals PClimit). We can keep ia=11 for the rest of the simulation to show the single fail state.
+
+ Test Case 3: One failure, but the miscompare lasts exactly PClimit frames and then returns to normal? 
+   Tlevel = 0.5, PClimit = 3
+   At time 0: all at 10.
+   From time 1 to 3: ia = 11 (so miscompare for 3 frames, which equals PClimit). Then at time 4, ia returns to 10. 
+   According to the requirement, if the miscompare lasts for exactly PClimit, then at the frame when it reaches PClimit, the failure is latched? Or is it latched when it exceeds? The requirement says "more than the persistence limit", but the model might latch at PClimit. Let's assume it latches at PClimit. So at time 3 (after 3 frames of miscompare) the failure is latched. Then even if ia returns to normal, we are in single fail state? The requirement doesn't specify that the failure can be cleared. So we assume once latched, it stays.
+
+ Test Case 4: Two failures (so that monitoring stops)
+   We start in no-fail state, then one failure is latched, then a second failure is latched. After the second failure, monitoring stops.
+   Tlevel = 0.5, PClimit = 2 (to make it quick).
+   At time 0: all at 10.
+   From time 1 to 2: ia = 11 -> first failure latched at time 2 (since PClimit=2, after 2 frames of miscompare).
+   Then from time 3 to 4: ib = 12 (so now we have two failed branches? Actually, after the first failure, we are in single fail state. Then we monitor the remaining two (ib and ic). If ib deviates from ic by more than Tlevel for more than PClimit, then we latch the second failure. So let's set:
+      After time 2, we have latched failure on A. Then from time 3 to 4, ib = 12 (and ic remains 10). So after 2 frames of miscompare (at time 4, the second failure is latched). Then monitoring stops.
+
+ Test Case 5: Single fail state, no second failure
+   Tlevel = 0.5, PClimit = 3
+   At time 0: all at 10.
+   From time 1 to 3: ia = 11 -> first failure latched at time 3.
+   Then from time 4 to 29: ib and ic are both 10 (so no miscompare, so no second failure).
+
+ Test Case 6: Single fail state, second failure is latched
+   Tlevel = 0.5, PClimit = 3
+   At time 0: all at 10.
+   From time 1 to 3: ia = 11 -> first failure latched at time 3.
+   Then from time 4 to 7: ib = 11 (so ib and ic differ by 1, which is >0.5) for 4 frames (more than PClimit=3) -> second failure latched at time 7.
+
+ Test Case 7: Single fail state, second failure is latched exactly at PClimit
+   Tlevel = 0.5, PClimit = 3
+   At time 0: all at 10.
+   From time 1 to 3: ia = 11 -> first failure latched at time 3.
+   Then from time 4 to 6: ib = 11 (so miscompare for 3 frames, which equals PClimit) -> second failure latched at time 6.
+
+ Test Case 8: No-fail state, miscompare for less than PClimit frames
+   Tlevel = 0.5, PClimit = 3
+   At time 0: all at 10.
+   From time 1 to 2: ia = 11 (only 2 frames, which is less than PClimit=3) -> no failure.
+   Then from time 3 to 29: all at 10.
+
+ Test Case 9: No-fail state, two signals deviate together (so that the mid-value is the third one)
+   Tlevel = 0.5, PClimit = 3
+   At time 0: all at 10.
+   From time 1 to 29: ia = 9, ib = 9, ic = 10. So the two branches (A and B) are together at 9, and C is at 10. 
+   The miscompare between (ia, ic) and (ib, ic) is 1, which is >0.5, but the miscompare between ia and ib is 0, which is within Tlevel. 
+   So we have two signals (A and B) that are in agreement, and C is different. 
+   According to the mid-value selection, the mid-value should be 9 (since 9 < 10 and 9 is the lower bound, but wait: the mid-value is the one that is bounded by the other two. In this case, 9 is not bounded by 10 and 10? Actually, we have two 9's and one 10. The sorted values: 9, 9, 10. The mid-value is the middle one, which is 9. So the selected value is 9.
+
+ Test Case 10: Edge case with Tlevel=0 and PClimit=1
+   Tlevel = 0, PClimit = 1
+   At time 0: all at 10.
+   At time 1: ia = 10.0001 (a tiny difference) -> since Tlevel=0, any difference is a miscompare. And since PClimit=1, after one frame of miscompare, the failure is latched? Actually, when PC becomes 1 (which equals PClimit) then the failure is latched. So at time 1, we have one frame of miscompare, so at time 1, the failure is latched? But note: the requirement says "more than the persistence limit", so if PClimit=1, then we need more than 1 frame? The model might latch when PC >= PClimit. So if at time 1, PC becomes 1, then it is equal to PClimit, so the failure is latched. We'll assume that.
+
+   We can set:
+      At time 0: all at 10.
+      At time 1: ia = 10.0001 -> miscompare, and then at time 2, the failure is latched? Or at the same time step? The model might update the PC and then check. Let's assume that at the end of the time step, the PC is updated and then if PC>=PClimit, the failure is latched. So at time 1, after the miscompare, PC becomes 1 (which equals PClimit) so the failure is latched. Then from time 2 to 29, we are in single fail state.
+
+   Alternatively, we can make the miscompare last for one frame and then return to normal. But once latched, the failure state remains.
+
+ We are to generate the CSV for each test case.
+
+ Let's write the code to generate these 10 test cases.
+
+ We'll create a list of test cases, each test case is a dictionary with:
+   - Tlevel: constant for the test case
+   - PClimit: constant for the test case
+   - time steps: a list of 30 time steps (0 to 29) and for each time step, the values of ia, ib, ic.
+
+ We'll generate the CSV strings accordingly.
+
+ Note: The output format requires the CSV to have the header: time,ia,ib,ic,PClimit,Tlevel
+
+ We'll write the CSV for each test case as a string.
+
+ Let's code accordingly.

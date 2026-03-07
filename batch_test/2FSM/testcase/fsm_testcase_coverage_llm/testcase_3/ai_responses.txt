@@ -1,0 +1,233 @@
+本轮对话时间: 541.04秒
+本轮对话总token数: 13483
+dataset\\lm_challenges\\original_models\\1_fsm\\1_fsm_reqs.docx
+当前脚本错误次数：0
+AI回复: 根据需求文档，我将生成20组覆盖状态机转换的测试用例。每个测试用例包含0-10共11个时间点的输入组合。
+
+```python
+import csv
+import itertools
+
+# 定义测试场景
+test_scenarios = []
+
+# 场景1: 正常启动到NOMINAL状态
+scenario1 = {
+    "name": "正常启动到NOMINAL",
+    "data": [
+        (0, 1, 0, 1, 0),  # STANDBY -> TRANSITION
+        (1, 0, 0, 1, 0),  # TRANSITION -> NOMINAL
+        (2, 0, 0, 1, 0),
+        (3, 0, 0, 1, 0),
+        (4, 0, 0, 1, 0),
+        (5, 0, 0, 1, 0),
+        (6, 0, 0, 1, 0),
+        (7, 0, 0, 1, 0),
+        (8, 0, 0, 1, 0),
+        (9, 0, 0, 1, 0),
+        (10, 1, 0, 1, 0),  # NOMINAL -> STANDBY
+    ]
+}
+
+# 场景2: 传感器故障触发MANEUVER
+scenario2 = {
+    "name": "传感器故障触发MANEUVER",
+    "data": [
+        (0, 1, 0, 1, 0),  # STANDBY
+        (1, 0, 0, 1, 0),  # TRANSITION -> NOMINAL
+        (2, 0, 0, 1, 0),  # NOMINAL
+        (3, 0, 0, 1, 1),  # limits触发传感器FAULT, NOMINAL -> MANEUVER
+        (4, 0, 0, 1, 1),  # MANEUVER持续
+        (5, 0, 0, 1, 1),
+        (6, 0, 0, 1, 1),
+        (7, 0, 0, 1, 0),  # limits恢复，传感器TRANSITION -> NOMINAL
+        (8, 0, 0, 1, 0),  # 但autopilot还在MANEUVER
+        (9, 0, 0, 1, 0),
+        (10, 1, 0, 1, 0),  # MANEUVER -> STANDBY
+    ]
+}
+
+# 场景3: apfail故障触发MANEUVER
+scenario3 = {
+    "name": "apfail故障触发MANEUVER",
+    "data": [
+        (0, 1, 0, 1, 0),  # STANDBY
+        (1, 0, 0, 1, 0),  # TRANSITION -> NOMINAL
+        (2, 0, 0, 1, 0),  # NOMINAL
+        (3, 0, 1, 1, 0),  # apfail触发STANDBY -> MANEUVER
+        (4, 0, 1, 1, 0),  # MANEUVER持续
+        (5, 0, 1, 1, 0),
+        (6, 0, 0, 1, 0),  # apfail恢复
+        (7, 0, 0, 1, 0),  # MANEUVER保持
+        (8, 0, 0, 1, 0),
+        (9, 0, 0, 1, 0),
+        (10, 1, 0, 1, 0),  # MANEUVER -> STANDBY
+    ]
+}
+
+# 场景4: supported失效
+scenario4 = {
+    "name": "supported失效",
+    "data": [
+        (0, 1, 0, 1, 0),  # STANDBY
+        (1, 0, 0, 1, 0),  # TRANSITION
+        (2, 0, 0, 0, 0),  # supported=0, 阻止转换到NOMINAL
+        (3, 0, 0, 0, 0),  # 保持在TRANSITION
+        (4, 0, 0, 0, 0),
+        (5, 0, 0, 0, 0),
+        (6, 0, 0, 1, 0),  # supported恢复
+        (7, 0, 0, 1, 0),  # TRANSITION -> NOMINAL
+        (8, 0, 0, 1, 0),  # NOMINAL
+        (9, 0, 0, 1, 0),
+        (10, 1, 0, 1, 0),  # NOMINAL -> STANDBY
+    ]
+}
+
+# 场景5: 复杂状态转换
+scenario5 = {
+    "name": "复杂状态转换",
+    "data": [
+        (0, 1, 0, 1, 0),  # STANDBY
+        (1, 0, 0, 1, 0),  # TRANSITION -> NOMINAL
+        (2, 0, 0, 1, 1),  # NOMINAL -> MANEUVER
+        (3, 1, 0, 1, 1),  # MANEUVER -> STANDBY
+        (4, 0, 0, 1, 1),  # STANDBY -> TRANSITION
+        (5, 0, 0, 1, 0),  # 等待limits恢复
+        (6, 0, 0, 1, 0),  # TRANSITION -> NOMINAL
+        (7, 0, 1, 1, 0),  # NOMINAL时apfail, 但apfail只在STANDBY时触发MANEUVER
+        (8, 1, 1, 1, 0),  # 回到STANDBY
+        (9, 0, 1, 1, 0),  # STANDBY -> MANEUVER (apfail)
+        (10, 1, 1, 1, 0),  # MANEUVER -> STANDBY
+    ]
+}
+
+# 场景6: 始终在STANDBY
+scenario6 = {
+    "name": "始终在STANDBY",
+    "data": [
+        (0, 1, 0, 1, 0),
+        (1, 1, 0, 1, 0),
+        (2, 1, 0, 1, 0),
+        (3, 1, 0, 1, 0),
+        (4, 1, 0, 1, 0),
+        (5, 1, 0, 1, 0),
+        (6, 1, 0, 1, 0),
+        (7, 1, 0, 1, 0),
+        (8, 1, 0, 1, 0),
+        (9, 1, 0, 1, 0),
+        (10, 1, 0, 1, 0),
+    ]
+}
+
+# 场景7: 快速状态切换
+scenario7 = {
+    "name": "快速状态切换",
+    "data": [
+        (0, 1, 0, 1, 0),
+        (1, 0, 0, 1, 0),
+        (2, 1, 0, 1, 0),
+        (3, 0, 0, 1, 0),
+        (4, 1, 0, 1, 0),
+        (5, 0, 0, 1, 0),
+        (6, 1, 0, 1, 0),
+        (7, 0, 0, 1, 0),
+        (8, 1, 0, 1, 0),
+        (9, 0, 0, 1, 0),
+        (10, 1, 0, 1, 0),
+    ]
+}
+
+# 场景8: 边界条件 - all false
+scenario8 = {
+    "name": "边界条件-all false",
+    "data": [
+        (0, 0, 0, 0, 0),
+        (1, 0, 0, 0, 0),
+        (2, 0, 0, 0, 0),
+        (3, 0, 0, 0, 0),
+        (4, 0, 0, 0, 0),
+        (5, 0, 0, 0, 0),
+        (6, 0, 0, 0, 0),
+        (7, 0, 0, 0, 0),
+        (8, 0, 0, 0, 0),
+        (9, 0, 0, 0, 0),
+        (10, 0, 0, 0, 0),
+    ]
+}
+
+# 场景9: 边界条件 - all true
+scenario9 = {
+    "name": "边界条件-all true",
+    "data": [
+        (0, 1, 1, 1, 1),
+        (1, 1, 1, 1, 1),
+        (2, 1, 1, 1, 1),
+        (3, 1, 1, 1, 1),
+        (4, 1, 1, 1, 1),
+        (5, 1, 1, 1, 1),
+        (6, 1, 1, 1, 1),
+        (7, 1, 1, 1, 1),
+        (8, 1, 1, 1, 1),
+        (9, 1, 1, 1, 1),
+        (10, 1, 1, 1, 1),
+    ]
+}
+
+# 场景10: 随机模式1
+scenario10 = {
+    "name": "随机模式1",
+    "data": [
+        (0, 1, 0, 1, 0),
+        (1, 0, 0, 1, 1),
+        (2, 0, 1, 1, 1),
+        (3, 1, 1, 1, 1),
+        (4, 1, 0, 0, 1),
+        (5, 0, 0, 0, 1),
+        (6, 0, 0, 1, 0),
+        (7, 1, 0, 1, 0),
+        (8, 0, 1, 1, 1),
+        (9, 0, 1, 1, 0),
+        (10, 1, 0, 1, 0),
+    ]
+}
+
+# 场景11-20: 更多组合
+scenarios = [
+    scenario1, scenario2, scenario3, scenario4, scenario5,
+    scenario6, scenario7, scenario8, scenario9, scenario10
+]
+
+# 生成另外10个场景
+for i in range(11, 21):
+    scenario = {
+        "name": f"组合场景{i}",
+        "data": []
+    }
+    
+    # 创建有意义的模式
+    base_pattern = [(t, 1, 0, 1, 0) for t in range(11)]
+    
+    # 修改一些时间点
+    if i % 2 == 0:
+        base_pattern[2] = (2, 0, 0, 1, 1)  # 触发MANEUVER
+        base_pattern[5] = (5, 0, 1, 1, 0)  # apfail
+    if i % 3 == 0:
+        base_pattern[3] = (3, 1, 0, 1, 0)  # 回STANDBY
+        base_pattern[7] = (7, 0, 0, 0, 0)  # supported失效
+    
+    scenario["data"] = base_pattern
+    scenarios.append(scenario)
+
+# 生成CSV格式的输出
+for i, scenario in enumerate(scenarios[:20], 1):
+    print(f"第{i}组 ({scenario['name']}):")
+    print("```csv")
+    print("time,standby,apfail,supported,limits")
+    
+    for row in scenario["data"]:
+        print(f"{row[0]},{row[1]},{row[2]},{row[3]},{row[4]}")
+    
+    print("```")
+    print()
+```
+--------------------------------------------------

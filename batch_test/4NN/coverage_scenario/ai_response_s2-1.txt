@@ -1,0 +1,220 @@
+本轮对话时间: 201.70秒
+本轮对话总token数: 13664
+dataset\lm_challenges\original_models\5_nn\5_nn_reqs.docx
+当前脚本错误次数：0
+AI回复: Action 1:
+Action Name: A1
+Semantic Description: x control points are in strictly increasing order, y control points are in strictly increasing order
+Input Constraint: cx1 < cx2 ∧ cx2 < cx3 ∧ cy1 < cy2 ∧ cy2 < cy3
+Temporal Constraint: true
+
+Action 2:
+Action Name: A2
+Semantic Description: x control points are in strictly increasing order, y control points are in strictly decreasing order
+Input Constraint: cx1 < cx2 ∧ cx2 < cx3 ∧ cy1 > cy2 ∧ cy2 > cy3
+Temporal Constraint: true
+
+Action 3:
+Action Name: A3
+Semantic Description: x control points are in strictly increasing order, y control points have middle value as maximum
+Input Constraint: cx1 < cx2 ∧ cx2 < cx3 ∧ cy1 < cy2 ∧ cy2 > cy3
+Temporal Constraint: true
+
+Action 4:
+Action Name: A4
+Semantic Description: x control points are in strictly increasing order, y control points have middle value as minimum
+Input Constraint: cx1 < cx2 ∧ cx2 < cx3 ∧ cy1 > cy2 ∧ cy2 < cy3
+Temporal Constraint: true
+
+Action 5:
+Action Name: A5
+Semantic Description: x control points are in strictly increasing order, y control points have first value as maximum
+Input Constraint: cx1 < cx2 ∧ cx2 < cx3 ∧ cy1 > cy2 ∧ cy1 > cy3
+Temporal Constraint: true
+
+Action 6:
+Action Name: A6
+Semantic Description: x control points are in strictly increasing order, y control points have first value as minimum
+Input Constraint: cx1 < cx2 ∧ cx2 < cx3 ∧ cy1 < cy2 ∧ cy1 < cy3
+Temporal Constraint: true
+
+Action 7:
+Action Name: A7
+Semantic Description: x control points are in strictly decreasing order, y control points are in strictly increasing order
+Input Constraint: cx1 > cx2 ∧ cx2 > cx3 ∧ cy1 < cy2 ∧ cy2 < cy3
+Temporal Constraint: true
+
+Action 8:
+Action Name: A8
+Semantic Description: x control points are in strictly decreasing order, y control points are in strictly decreasing order
+Input Constraint: cx1 > cx2 ∧ cx2 > cx3 ∧ cy1 > cy2 ∧ cy2 > cy3
+Temporal Constraint: true
+
+Action 9:
+Action Name: A9
+Semantic Description: x control points are in strictly decreasing order, y control points have middle value as maximum
+Input Constraint: cx1 > cx2 ∧ cx2 > cx3 ∧ cy1 < cy2 ∧ cy2 > cy3
+Temporal Constraint: true
+
+Action 10:
+Action Name: A10
+Semantic Description: x control points are in strictly decreasing order, y control points have middle value as minimum
+Input Constraint: cx1 > cx2 ∧ cx2 > cx3 ∧ cy1 > cy2 ∧ cy2 < cy3
+Temporal Constraint: true
+
+Action 11:
+Action Name: A11
+Semantic Description: x control points are in strictly decreasing order, y control points have first value as maximum
+Input Constraint: cx1 > cx2 ∧ cx2 > cx3 ∧ cy1 > cy2 ∧ cy1 > cy3
+Temporal Constraint: true
+
+Action 12:
+Action Name: A12
+Semantic Description: x control points are in strictly decreasing order, y control points have first value as minimum
+Input Constraint: cx1 > cx2 ∧ cx2 > cx3 ∧ cy1 < cy2 ∧ cy1 < cy3
+Temporal Constraint: true
+
+Action 13:
+Action Name: A13
+Semantic Description: x control points have middle value as maximum, y control points are in strictly increasing order
+Input Constraint: cx1 < cx2 ∧ cx2 > cx3 ∧ cy1 < cy2 ∧ cy2 < cy3
+Temporal Constraint: true
+
+Action 14:
+Action Name: A14
+Semantic Description: x control points have middle value as maximum, y control points are in strictly decreasing order
+Input Constraint: cx1 < cx2 ∧ cx2 > cx3 ∧ cy1 > cy2 ∧ cy2 > cy3
+Temporal Constraint: true
+
+Action 15:
+Action Name: A15
+Semantic Description: x control points have middle value as maximum, y control points have middle value as maximum
+Input Constraint: cx1 < cx2 ∧ cx2 > cx3 ∧ cy1 < cy2 ∧ cy2 > cy3
+Temporal Constraint: true
+
+Action 16:
+Action Name: A16
+Semantic Description: x control points have middle value as maximum, y control points have middle value as minimum
+Input Constraint: cx1 < cx2 ∧ cx2 > cx3 ∧ cy1 > cy2 ∧ cy2 < cy3
+Temporal Constraint: true
+
+Action 17:
+Action Name: A17
+Semantic Description: x control points have middle value as maximum, y control points have first value as maximum
+Input Constraint: cx1 < cx2 ∧ cx2 > cx3 ∧ cy1 > cy2 ∧ cy1 > cy3
+Temporal Constraint: true
+
+Action 18:
+Action Name: A18
+Semantic Description: x control points have middle value as maximum, y control points have first value as minimum
+Input Constraint: cx1 < cx2 ∧ cx2 > cx3 ∧ cy1 < cy2 ∧ cy1 < cy3
+Temporal Constraint: true
+
+Action 19:
+Action Name: A19
+Semantic Description: x control points have middle value as minimum, y control points are in strictly increasing order
+Input Constraint: cx1 > cx2 ∧ cx2 < cx3 ∧ cy1 < cy2 ∧ cy2 < cy3
+Temporal Constraint: true
+
+Action 20:
+Action Name: A20
+Semantic Description: x control points have middle value as minimum, y control points are in strictly decreasing order
+Input Constraint: cx1 > cx2 ∧ cx2 < cx3 ∧ cy1 > cy2 ∧ cy2 > cy3
+Temporal Constraint: true
+
+Action 21:
+Action Name: A21
+Semantic Description: x control points have middle value as minimum, y control points have middle value as maximum
+Input Constraint: cx1 > cx2 ∧ cx2 < cx3 ∧ cy1 < cy2 ∧ cy2 > cy3
+Temporal Constraint: true
+
+Action 22:
+Action Name: A22
+Semantic Description: x control points have middle value as minimum, y control points have middle value as minimum
+Input Constraint: cx1 > cx2 ∧ cx2 < cx3 ∧ cy1 > cy2 ∧ cy2 < cy3
+Temporal Constraint: true
+
+Action 23:
+Action Name: A23
+Semantic Description: x control points have middle value as minimum, y control points have first value as maximum
+Input Constraint: cx1 > cx2 ∧ cx2 < cx3 ∧ cy1 > cy2 ∧ cy1 > cy3
+Temporal Constraint: true
+
+Action 24:
+Action Name: A24
+Semantic Description: x control points have middle value as minimum, y control points have first value as minimum
+Input Constraint: cx1 > cx2 ∧ cx2 < cx3 ∧ cy1 < cy2 ∧ cy1 < cy3
+Temporal Constraint: true
+
+Action 25:
+Action Name: A25
+Semantic Description: x control points have first value as maximum, y control points are in strictly increasing order
+Input Constraint: cx1 > cx2 ∧ cx1 > cx3 ∧ cy1 < cy2 ∧ cy2 < cy3
+Temporal Constraint: true
+
+Action 26:
+Action Name: A26
+Semantic Description: x control points have first value as maximum, y control points are in strictly decreasing order
+Input Constraint: cx1 > cx2 ∧ cx1 > cx3 ∧ cy1 > cy2 ∧ cy2 > cy3
+Temporal Constraint: true
+
+Action 27:
+Action Name: A27
+Semantic Description: x control points have first value as maximum, y control points have middle value as maximum
+Input Constraint: cx1 > cx2 ∧ cx1 > cx3 ∧ cy1 < cy2 ∧ cy2 > cy3
+Temporal Constraint: true
+
+Action 28:
+Action Name: A28
+Semantic Description: x control points have first value as maximum, y control points have middle value as minimum
+Input Constraint: cx1 > cx2 ∧ cx1 > cx3 ∧ cy1 > cy2 ∧ cy2 < cy3
+Temporal Constraint: true
+
+Action 29:
+Action Name: A29
+Semantic Description: x control points have first value as maximum, y control points have first value as maximum
+Input Constraint: cx1 > cx2 ∧ cx1 > cx3 ∧ cy1 > cy2 ∧ cy1 > cy3
+Temporal Constraint: true
+
+Action 30:
+Action Name: A30
+Semantic Description: x control points have first value as maximum, y control points have first value as minimum
+Input Constraint: cx1 > cx2 ∧ cx1 > cx3 ∧ cy1 < cy2 ∧ cy1 < cy3
+Temporal Constraint: true
+
+Action 31:
+Action Name: A31
+Semantic Description: x control points have first value as minimum, y control points are in strictly increasing order
+Input Constraint: cx1 < cx2 ∧ cx1 < cx3 ∧ cy1 < cy2 ∧ cy2 < cy3
+Temporal Constraint: true
+
+Action 32:
+Action Name: A32
+Semantic Description: x control points have first value as minimum, y control points are in strictly decreasing order
+Input Constraint: cx1 < cx2 ∧ cx1 < cx3 ∧ cy1 > cy2 ∧ cy2 > cy3
+Temporal Constraint: true
+
+Action 33:
+Action Name: A33
+Semantic Description: x control points have first value as minimum, y control points have middle value as maximum
+Input Constraint: cx1 < cx2 ∧ cx1 < cx3 ∧ cy1 < cy2 ∧ cy2 > cy3
+Temporal Constraint: true
+
+Action 34:
+Action Name: A34
+Semantic Description: x control points have first value as minimum, y control points have middle value as minimum
+Input Constraint: cx1 < cx2 ∧ cx1 < cx3 ∧ cy1 > cy2 ∧ cy2 < cy3
+Temporal Constraint: true
+
+Action 35:
+Action Name: A35
+Semantic Description: x control points have first value as minimum, y control points have first value as maximum
+Input Constraint: cx1 < cx2 ∧ cx1 < cx3 ∧ cy1 > cy2 ∧ cy1 > cy3
+Temporal Constraint: true
+
+Action 36:
+Action Name: A36
+Semantic Description: x control points have first value as minimum, y control points have first value as minimum
+Input Constraint: cx1 < cx2 ∧ cx1 < cx3 ∧ cy1 < cy2 ∧ cy1 < cy3
+Temporal Constraint: true
+--------------------------------------------------

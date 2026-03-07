@@ -1,0 +1,7 @@
+docx==0.2.4
+matlabengine==24.2.2
+openai==1.107.0
+pandas==2.0.3
+NumPy==1.26.4
+python_docx==1.2.0
+Requests==2.32.5

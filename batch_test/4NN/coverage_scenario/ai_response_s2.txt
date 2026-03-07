@@ -1,0 +1,100 @@
+本轮对话时间: 242.86秒
+本轮对话总token数: 17010
+dataset\lm_challenges\original_models\5_nn\5_nn_reqs.docx
+当前脚本错误次数：0
+AI回复: Action 1:
+Action Name: A1
+Semantic Description: x control points in strictly increasing order, y control points in strictly increasing order, all near positive bound (2)
+Input Constraint: cx1 > 1 ∧ cx2 > 1 ∧ cx3 > 1 ∧ cx1 < cx2 ∧ cx2 < cx3 ∧ cy1 > 1 ∧ cy2 > 1 ∧ cy3 > 1 ∧ cy1 < cy2 ∧ cy2 < cy3
+Temporal Constraint: true
+
+Action 2:
+Action Name: A2
+Semantic Description: x control points in strictly increasing order, y control points in strictly increasing order, all near negative bound (-2)
+Input Constraint: cx1 < -1 ∧ cx2 < -1 ∧ cx3 < -1 ∧ cx1 < cx2 ∧ cx2 < cx3 ∧ cy1 < -1 ∧ cy2 < -1 ∧ cy3 < -1 ∧ cy1 < cy2 ∧ cy2 < cy3
+Temporal Constraint: true
+
+Action 3:
+Action Name: A3
+Semantic Description: x control points in strictly increasing order, y control points in strictly increasing order, crossing zero from negative to positive
+Input Constraint: cx1 < 0 ∧ cx3 > 0 ∧ cx1 < cx2 ∧ cx2 < cx3 ∧ cy1 < 0 ∧ cy3 > 0 ∧ cy1 < cy2 ∧ cy2 < cy3
+Temporal Constraint: true
+
+Action 4:
+Action Name: A4
+Semantic Description: x control points in strictly decreasing order, y control points in strictly decreasing order, all near positive bound (2)
+Input Constraint: cx1 > 1 ∧ cx2 > 1 ∧ cx3 > 1 ∧ cx1 > cx2 ∧ cx2 > cx3 ∧ cy1 > 1 ∧ cy2 > 1 ∧ cy3 > 1 ∧ cy1 > cy2 ∧ cy2 > cy3
+Temporal Constraint: true
+
+Action 5:
+Action Name: A5
+Semantic Description: x control points in strictly decreasing order, y control points in strictly decreasing order, all near negative bound (-2)
+Input Constraint: cx1 < -1 ∧ cx2 < -1 ∧ cx3 < -1 ∧ cx1 > cx2 ∧ cx2 > cx3 ∧ cy1 < -1 ∧ cy2 < -1 ∧ cy3 < -1 ∧ cy1 > cy2 ∧ cy2 > cy3
+Temporal Constraint: true
+
+Action 6:
+Action Name: A6
+Semantic Description: x control points in strictly decreasing order, y control points in strictly decreasing order, crossing zero from positive to negative
+Input Constraint: cx1 > 0 ∧ cx3 < 0 ∧ cx1 > cx2 ∧ cx2 > cx3 ∧ cy1 > 0 ∧ cy3 < 0 ∧ cy1 > cy2 ∧ cy2 > cy3
+Temporal Constraint: true
+
+Action 7:
+Action Name: A7
+Semantic Description: x control points have middle value as maximum, y control points have middle value as maximum, all near positive bound (2)
+Input Constraint: cx1 > 1 ∧ cx2 > 1 ∧ cx3 > 1 ∧ cx1 < cx2 ∧ cx2 > cx3 ∧ cy1 > 1 ∧ cy2 > 1 ∧ cy3 > 1 ∧ cy1 < cy2 ∧ cy2 > cy3
+Temporal Constraint: true
+
+Action 8:
+Action Name: A8
+Semantic Description: x control points have middle value as maximum, y control points have middle value as maximum, all near negative bound (-2)
+Input Constraint: cx1 < -1 ∧ cx2 < -1 ∧ cx3 < -1 ∧ cx1 < cx2 ∧ cx2 > cx3 ∧ cy1 < -1 ∧ cy2 < -1 ∧ cy3 < -1 ∧ cy1 < cy2 ∧ cy2 > cy3
+Temporal Constraint: true
+
+Action 9:
+Action Name: A9
+Semantic Description: x control points have middle value as minimum, y control points have middle value as minimum, all near positive bound (2)
+Input Constraint: cx1 > 1 ∧ cx2 > 1 ∧ cx3 > 1 ∧ cx1 > cx2 ∧ cx2 < cx3 ∧ cy1 > 1 ∧ cy2 > 1 ∧ cy3 > 1 ∧ cy1 > cy2 ∧ cy2 < cy3
+Temporal Constraint: true
+
+Action 10:
+Action Name: A10
+Semantic Description: x control points have middle value as minimum, y control points have middle value as minimum, all near negative bound (-2)
+Input Constraint: cx1 < -1 ∧ cx2 < -1 ∧ cx3 < -1 ∧ cx1 > cx2 ∧ cx2 < cx3 ∧ cy1 < -1 ∧ cy2 < -1 ∧ cy3 < -1 ∧ cy1 > cy2 ∧ cy2 < cy3
+Temporal Constraint: true
+
+Action 11:
+Action Name: A11
+Semantic Description: x control points have first value as maximum, y control points have first value as maximum, all near positive bound (2)
+Input Constraint: cx1 > 1 ∧ cx2 > 1 ∧ cx3 > 1 ∧ cx1 > cx2 ∧ cx1 > cx3 ∧ cy1 > 1 ∧ cy2 > 1 ∧ cy3 > 1 ∧ cy1 > cy2 ∧ cy1 > cy3
+Temporal Constraint: true
+
+Action 12:
+Action Name: A12
+Semantic Description: x control points have first value as maximum, y control points have first value as maximum, all near negative bound (-2)
+Input Constraint: cx1 < -1 ∧ cx2 < -1 ∧ cx3 < -1 ∧ cx1 > cx2 ∧ cx1 > cx3 ∧ cy1 < -1 ∧ cy2 < -1 ∧ cy3 < -1 ∧ cy1 > cy2 ∧ cy1 > cy3
+Temporal Constraint: true
+
+Action 13:
+Action Name: A13
+Semantic Description: x control points have first value as minimum, y control points have first value as minimum, all near positive bound (2)
+Input Constraint: cx1 > 1 ∧ cx2 > 1 ∧ cx3 > 1 ∧ cx1 < cx2 ∧ cx1 < cx3 ∧ cy1 > 1 ∧ cy2 > 1 ∧ cy3 > 1 ∧ cy1 < cy2 ∧ cy1 < cy3
+Temporal Constraint: true
+
+Action 14:
+Action Name: A14
+Semantic Description: x control points have first value as minimum, y control points have first value as minimum, all near negative bound (-2)
+Input Constraint: cx1 < -1 ∧ cx2 < -1 ∧ cx3 < -1 ∧ cx1 < cx2 ∧ cx1 < cx3 ∧ cy1 < -1 ∧ cy2 < -1 ∧ cy3 < -1 ∧ cy1 < cy2 ∧ cy1 < cy3
+Temporal Constraint: true
+
+Action 15:
+Action Name: A15
+Semantic Description: x control points in strictly increasing order near bound, y control points with middle value as maximum crossing zero
+Input Constraint: cx1 > 1 ∧ cx2 > 1 ∧ cx3 > 1 ∧ cx1 < cx2 ∧ cx2 < cx3 ∧ cy1 < 0 ∧ cy3 < 0 ∧ cy1 < cy2 ∧ cy2 > cy3
+Temporal Constraint: true
+
+Action 16:
+Action Name: A16
+Semantic Description: x control points in strictly decreasing order crossing zero, y control points in strictly increasing order near bound
+Input Constraint: cx1 > 0 ∧ cx3 < 0 ∧ cx1 > cx2 ∧ cx2 > cx3 ∧ cy1 > 1 ∧ cy2 > 1 ∧ cy3 > 1 ∧ cy1 < cy2 ∧ cy2 < cy3
+Temporal Constraint: true
+--------------------------------------------------

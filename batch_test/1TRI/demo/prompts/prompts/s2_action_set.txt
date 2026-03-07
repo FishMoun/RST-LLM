@@ -1,0 +1,65 @@
+**Complete Step 2:** 
+
+Based on the extracted requirement results, generate the actions that exist in the system:
+output the typical actions within the system input domain.
+An action is an excitation of the system in the form of a temporal input sequence.
+
+**Output Format**(Just output the aciton set, do not output any other characters):
+Action 1:
+Action Name: A1
+Semantic Description:
+Input Constraint:
+Temporal Constraint:
+
+Action 2:
+Action Name: A2
+Semantic Description:
+Input Constraint:
+Temporal Constraint:
+...
+
+**Example**
+
+Action Example 1:
+Action Name: A1
+Semantic Description: Light throttle press in 3s, where “light” means throttle < 0.3
+Input Constraint: throttle < 0.3
+Temporal Constraint: duration <= 3
+
+Action Example 2:
+(If throttle is a parameterized variable defined by PCHIP control points, with control points c1, c2, c3)
+Action Name: A2
+Semantic Description: Throttle gradually increases, and no braking
+Input Constraint: c1 < c2 ∧ c2 < c3 ∧ brake == 0
+Temporal Constraint: true
+
+**Key Notes 1: Form of Constraints**
+
+1. The allowed symbols in constraints include `<, <=, ==, >, >=, ∧,(),abs()`.(`∨` is not not allowed, action must be atomic)
+   Forms like `a < b < c` are not allowed; only forms like `a < b ∧ b < c` are permitted.
+2. Input constraints must not contain natural language, and expressions such as `ia(t)` are not allowed.
+   Use `ia` directly instead.
+3. Input constraints should contain **only** model input variables, control-point variables from the test configuration,
+   Model output variables or other constructed variables are not allowed.
+4. If a model input variable is parameterized into control-point variables, the input constraint should include **only** the control-point variables, without including the original variable.
+5. Temporal constraints specify constraints on the actual duration of the action, for example: `duration <= k`, do not use `duration == k`
+   where `duration` refers to the action duration, and `k` should be a constant or an input variable.
+   If no specific constraint exists, use `true`.
+6. Temporal constraints and test configuration constraints should **not appear** in the input constraint.
+7. The test configuration may assign a constant value to an input variable; in this case, that variable does not need to be considered again in the input constraint.
+
+**Key Notes 2: Principles of Action Definition**
+
+1. The occurrence of an action **must not have preconditions**.
+   For example, an action must not require the system to already be in a certain state.
+   System states should be triggered by one or more actions or sequences of actions.
+2. If symmetric signals exist among input variables, action merging is not allowed.
+   A complete list of actions must be explicitly enumerated.
+3. The input constraints of actions must not overlap.
+   All actions in the action set must be pairwise mutually exclusive.
+
+**Key Notes 3: Format Correctness**
+
+1. If an action generated during analysis does not satisfy the required constraint form,
+   that action must **not** be included in the final action set.
+   In this task, **output format correctness has the highest priority**.

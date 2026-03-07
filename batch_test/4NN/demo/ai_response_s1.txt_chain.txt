@@ -1,0 +1,50 @@
+思维链内容:
+We are given a requirement document for a neural network model. We need to extract information as per the steps.
+
+Step 1: 
+  #1: Model description: We are told the model is a two-input single-output two hidden layer feed forward nonlinear 2x10x10x1 neural network. The model name is given as 'nn_12B.mdl'. We'll extract that.
+
+  #2: Requirement items: The document lists several requirements. We need to extract each requirement item with a description and the original text.
+
+  #3: Variable information: Two tables are provided for input and output. We extract the variables from these tables. Note: The table has columns: Scope, Name, #, Type, Description. We are to extract variable name, type (mapping Double to real), description, port type (Input/Output), and is constant (we assume No for inputs and outputs unless specified, but here they are not constants). Also note: There is a truth data matrix with xt, yt, zt. However, these are not model variables but data for testing. The model variables are only x, y, z.
+
+  #4: Test Config information: At the end, there are three test config items. We extract them as they are, in original text.
+
+Let's proceed step by step.
+
+#1: Model Name and Description
+  Model Name: nn_12B.mdl
+  Model Description: This example is a two-input single-output two hidden layer feed forward nonlinear 2x10x10x1 neural network. Neural networks of this form are common utilities in modeling and simulation for capturing complex numerical dependencies. In this example, a single dependent variable, z, is computed based on two independent parameters, x and y.
+
+#2: Requirement items
+  We see the following requirements:
+
+  1. The maximum value of the NN output, z, shall always be less than or equal to 1.1, regardless of the input values.
+  2. The minimum value of the NN output, z, shall always be greater than or equal to -0.2, regardless of the input values.
+  3. Using a first order finite backward difference equation, the spatial derivatives of Δz/ Δxt = (z(n,1)-z(n-1))/(xt(n,1)-xt(n-1,1) and Δz/ Δyt = (z(n,1)-z(n-1))/(yt(n,1)-yt(n-1,1) shall never exceed a top bound of +10 or bottom bound of -35 (e.g. -35 <= Δz/ Δ(xt,yt) <= 10), where n denotes an index to the current values and n-1 denotes the prior values in the included truth data for xt and yt.
+  4. The absolute error between the zt truth data and the output z shall never exceed a tolerance of 0.01, for the equivalent input of (xt, yt).
+
+  We will list these as four requirement items.
+
+#3: Variable information
+  From Table 1 (Inputs):
+    x: Double, First Input Signal
+    y: Double, Second Input Signal
+
+  From Table 2 (Outputs):
+    z: Double, Dependent Variable Output Signal
+
+  We note that the type "Double" is a real number. So we set Type: real.
+
+  Also, note that the variables are not constants and are input/output accordingly.
+
+#4: Test Config information
+  The document says:
+    Test config:
+    1. x is parameterized as a PCHIP-interpolated smooth signal, defined by 3 control points cx1,cx2,cx3, -2<=x<=2
+    2. y is parameterized as a PCHIP-interpolated smooth signal, defined by 3 control points cy1,cy2,cy3, -2<=y<=2
+    3. t = 100 (t is simulation time)
+
+  We extract these three lines as three test configurations.
+
+Now, we format the output as per the required output format.

@@ -1,0 +1,27 @@
+Experiment 1329-1-3 Time Summary:
+llm_interaction_time_step1: 53.98 seconds
+llm_interaction_time_step2: 182.35 seconds
+total_llm_interaction_time: 479.09 seconds
+testcase_generation_time: 0.0 seconds
+matlab_simulation_time: 0.0 seconds
+total_experiment_time: 479.09 seconds
+Experiment 1329-1-3 Time Summary:
+total_llm_interaction_time: 0.0 seconds
+testcase_generation_time: 3.67 seconds
+matlab_simulation_time: 0.18 seconds
+total_experiment_time: 3.85 seconds
+Experiment 1329-1-3 Time Summary:
+total_llm_interaction_time: 0.0 seconds
+testcase_generation_time: 3.83 seconds
+matlab_simulation_time: 0.17 seconds
+total_experiment_time: 4.0 seconds
+Experiment 1329-1-3 Time Summary:
+total_llm_interaction_time: 116.29 seconds
+testcase_generation_time: 2.03 seconds
+matlab_simulation_time: 0.01 seconds
+total_experiment_time: 118.33 seconds
+Experiment 1329-1-3 Time Summary:
+total_llm_interaction_time: 0.0 seconds
+testcase_generation_time: 0.0 seconds
+matlab_simulation_time: 0.0 seconds
+total_experiment_time: 0.0 seconds

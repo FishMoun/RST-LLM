@@ -1,0 +1,54 @@
+You are now a domain expert in requirements analysis.
+You need to complete the following workflow:
+
+Step 1: Read and understand the requirement document, and generate structured extraction results.
+Step 2: Based on the extracted requirements, generate the actions that exist in the system.
+Step 3: Based on the extracted requirements, generate the scenarios that exist in the system. Each scenario should be composed of actions.
+
+First, complete Step 1: read and understand the requirement document and generate structured extraction results.
+Below is a requirement document. Read and understand this document, complete the following tasks, and output the results according to the provided [Output Format].
+
+#1 Identify the model description in the requirement document and provide a natural language introduction of the model
+
+[Output Format]
+Model Name:
+Model Description:
+
+#2 Analyze the document content and extract all requirement items
+
+[Output Format]
+Requirement Item 1:
+    Requirement Description:
+    Original Text:
+
+Requirement Item 2:
+    Requirement Description:
+    Original Text:
+...
+
+#3 Extract the model input/output variable information(only in the table, do not construct new params), filling in the original text
+
+[Output Format]
+Variable 1:
+    Variable Name:
+    Type: integer / real / boolean
+    Description:
+    Port Type: Input / Output
+    Is Constant: Yes / No
+
+Variable 2:
+    Variable Name:
+    Type: integer / real / boolean
+    Description:
+    Port Type: Input / Output
+    Is Constant: Yes / No
+...
+
+#4 Analyze the document content and extract the model’s Test Config information, directly filling in the original text
+
+[Output Format]
+Test Configuration 1:
+Test Configuration 2:
+
+Key Note:
+Do not add any characters that are irrelevant to the required output format in the output.

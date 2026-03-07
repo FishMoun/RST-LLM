@@ -1,0 +1,41 @@
+Complete Step 3: Based on the extracted requirement results, generate the scenarios that exist in the system. Each scenario should be composed of actions.
+Based on the extracted requirement items and the action set above, continue to complete the following tasks:
+According to the specified format, and based on the given test configuration, randomly generate 10 scenarios that 
+together cover all the actions and requirement items.
+
+**Scenario Definition**
+Let $\mathbb{A}$ denote a finite action set.
+A \emph{scenario} is defined as a tuple
+\[
+\mathcal{S} = (\mathbf{A}, \sigma_S, \rho),
+\]
+where:
+\begin{itemize}
+  \item $\mathbf{A} = \langle \mathcal{A}_1, \mathcal{A}_2, \dots, \mathcal{A}_K \rangle$
+  is an ordered sequence of actions, with $\mathcal{A}_k \in \mathbb{A}$;
+  \item $\sigma_S$ denotes the semantic description of the scenario;
+  \item $\rho$ denotes the identifier of the associated requirement(s).
+\end{itemize}
+
+
+### Output Format((Do not output any other characters)):
+#S1:
+* Scenario Semantic Description: (natural language description)
+* Executable Action Set: (action names, separated by commas, e.g., A1,A2)
+* Scenario Action Sequence: (ordered list enclosed in `[ ]`, where each element is an action name, e.g., [A1,A2])
+* Associated Requirement:
+
+#S2:
+...
+
+### Scenario Example:
+#S1:
+* Scenario Semantic Description: First lightly press the throttle (assumed to correspond to action A1), then lightly press the brake (assumed to correspond to action A2), and then press the throttle aggressively (assumed to correspond to action A3)
+* Executable Actions: A1, A2, A3
+* Scenario Action Sequence: [A1, A2, A3]
+* Associated Requirement: (fill in the relevant requirement IDs)
+
+
+### Key Notes 1:
+The scenario semantic description should express a **feasible and random combination of action sequences**.
+The scenario action sequence should be **consistent with the scenario semantic description**.

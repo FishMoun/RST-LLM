@@ -1,0 +1,1 @@
+Consider input signals scope, especially when the signal is near the bound or cross zero.
