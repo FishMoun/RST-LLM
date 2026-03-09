@@ -7,14 +7,14 @@ from utils import Utils
 # 该类用于保存大模型的基本信息、与大模型对话
 class LLMTool:
     # deepseek的密钥
-    api_key = "sk-49cbcd3c8953444696bf1eea9589ec3a"
+    api_key = ""
     # deepseek的api
     api_url = "https://api.deepseek.com"
 
     # aliyun的密钥
     aliyun_api_key = "sk-5c1b94996a5a4b219a9552ff9fe56f24"
     # aliyun的api
-    aliyun_api_url = "https://dashscope.aliyuncs.com/compatible-mode/v1"
+    aliyun_api_url = ""
     def __init__(self):
         self.messages = [
       
