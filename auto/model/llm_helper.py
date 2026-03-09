@@ -3,7 +3,7 @@ import re
 # 用大模型解析得到的信息，辅助其他模块工作
 class LLM_Helper:
     # deepseek的密钥
-    api_key = "sk-49cbcd3c8953444696bf1eea9589ec3a"
+    api_key = ""
     # deepseek的api
     api_url = "https://api.deepseek.com"
     # 记录缓存
